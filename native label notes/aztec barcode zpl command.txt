@@ -1,0 +1,44 @@
+=========
+QUESTION
+=========
+I'm trying to scale an Aztec barcode to a 5"x5.5" label, but the default Aztec encoder doesn't create any barcodes larger than about 0.25"x0.25".
+
+How can I scale it larger?
+
+My code is below:
+
+^XA
+^MTD
+^BON,10,N,250,N,1,0
+^FO100,100 ^FD Barcode Text^FS
+^FO275,1350^AVN,200,200^FDText of Barcode Text^FS
+^XZ
+
+========
+ANSWER
+========
+The Aztec barcode command:
+
+^B0a,b,c,d,e,f,g
+Where b is the magnification. And would change the symbol's "dot" size.
+
+Where d is the error control and symbol size/type indicator and would change the redundancy.
+
+You had your d set to something out of the range (250), which caused it to default to 0. More redundancy means larger symbol, but not the symbol's "dot" size.
+
+Accepted Values for d:
+
+0 = default error correction level
+01 to 99 = error correction percentage (minimum)
+101 to 104 = 1 to 4-layer compact symbol
+201 to 232 = 1 to 32-layer full-range symbol
+300 = a simple Aztec “Rune”
+Default Value: 0
+Example ZPL to make a "bigger" symbol:
+
+^XA
+^MTD
+^BON,10,N,208,N,1,0
+^FO100,100 ^FD Barcode Text^FS
+^FO100,700^AVN,100,100^FDText of Barcode Text^FS
+^XZ
